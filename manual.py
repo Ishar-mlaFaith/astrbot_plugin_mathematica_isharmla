@@ -4,6 +4,7 @@ from typing import Iterable
 class ManualSearcher:
     def __init__(self, language='zh_CN'):
         self.language = language
+        self.plugin_directory = './data/plugins/astrbot_plugin_mathematica_isharmla/'
         self.localization_file_name = "manual.json"
         self.languages_available = ['zh_CN', 'EN', 'JP', 'zh_TW']
 
@@ -11,7 +12,7 @@ class ManualSearcher:
         if language == 'LanguageNotSelected' or language not in ['EN', 'JP', 'zh_TW']:
             # 未设定语言或语言设定不合法时默认使用中文
             language = self.language
-        return f'./localizations/{language}/manual.json'
+        return f'{self.plugin_directory}/localizations/{language}/manual.json'
     
     def _bottom_up_search(self, directory_series):
         # 根据输入地址单找到帮助文档中最接近的项目。地址单结构应为`["command_name", "argument_name", "subargument_name", ...]`
