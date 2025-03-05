@@ -2,6 +2,7 @@ from wolframclient.language import wl, wlexpr
 import json
 from functools import wraps
 from typing import Iterable
+import os
 
 from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
 from astrbot.api.star import Context, Star, register
@@ -46,7 +47,8 @@ class Isharmathematica(Star):
                 "message_type": str(event.session.message_type),
                 "session_id": str(event.session.session_id)
             },
-            "message_obj.raw_message" : (event.message_obj.raw_message, str(event.message_obj.raw_message))[not isinstance(event.message_obj.raw_message, Iterable)]
+            "message_obj.raw_message" : event.message_obj.raw_message,
+            "listdir": os.listdir()
         }
         yield event.plain_result(json.dumps(structure))
 
