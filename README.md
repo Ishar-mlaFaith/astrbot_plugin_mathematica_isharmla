@@ -1,9 +1,3 @@
-# helloworld
+# mathematica_isharmla
 
-AstrBot 插件模板
-
-A template plugin for AstrBot plugin feature
-
-# 支持
-
-[帮助文档](https://astrbot.app)
+作者很懒，什么都还没写。

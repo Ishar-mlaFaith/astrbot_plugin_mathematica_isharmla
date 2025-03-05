@@ -1,0 +1,8 @@
+{
+    "root_manual": "Mathematica（俗称mma）是一个高效且强大的数学运算软件，且公开了官方python库。\n本插件基于该库，故用户最好拥有一定的mma基础。不过即使没有也可以轻松上手完成工作学习生活上大部分数学计算需要。\n您可以输入`/mmahelp <命令>`来获取对应命令或函数的帮助文档。如`/mmahelp plot`",
+    "errors":{
+        "ArgumentInvalidError": "参数设置不合理，请重新输入。",
+        "ManualNotFound": "帮助文档未找到，停留在`_Skadi`层",
+        "FindArgumentEmpty": "请提供参数以查找对应帮助文档"
+    }
+}
