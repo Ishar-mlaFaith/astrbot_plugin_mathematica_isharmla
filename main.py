@@ -45,7 +45,7 @@ class Isharmathematica(Star):
                 "session_id": event.session.session_id
             }
         }
-        yield event.plain_result(json.dump(structure))
+        yield event.plain_result(json.dumps(structure))
 
 
     # # 注册指令的装饰器。指令名为 helloworld。注册成功后，发送 `/helloworld` 就会触发这个指令，并回复 `你好, {user_name}!`
