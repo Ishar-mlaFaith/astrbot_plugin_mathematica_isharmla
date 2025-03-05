@@ -1,5 +1,6 @@
 from wolframclient.language import wl, wlexpr
 import json
+from functools import wraps
 
 from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
 from astrbot.api.star import Context, Star, register
@@ -23,7 +24,11 @@ class Isharmathematica(Star):
 
     def debug_register(self):
         # 更改debug方法的触发词
-        self.specter_ping = filter.command(f'{self.debug_prefix}ping')(self._specter_ping_impl)
+        @wraps(self._specter_ping_impl)
+        async def wrapper_specter_ping(event: AstrMessageEvent):
+            return await self._specter_ping_impl(event)
+
+        self.specter_ping = filter.command(command_name=f'{self.debug_prefix}ping')(wrapper_specter_ping)
 
     async def _specter_ping_impl(self, event: AstrMessageEvent):
         yield event.plain_result(
