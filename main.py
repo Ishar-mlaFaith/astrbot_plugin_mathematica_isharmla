@@ -46,7 +46,7 @@ class Isharmathematica(Star):
                 "message_type": str(event.session.message_type),
                 "session_id": str(event.session.session_id)
             },
-            "message_obg.raw_message" : (event.message_obj.raw_message, str(event.message_obj.raw_message))[not isinstance(event.message_obj.raw_message, Iterable)]
+            "message_obj.raw_message" : (event.message_obj.raw_message, str(event.message_obj.raw_message))[not isinstance(event.message_obj.raw_message, Iterable)]
         }
         yield event.plain_result(json.dumps(structure))
 
