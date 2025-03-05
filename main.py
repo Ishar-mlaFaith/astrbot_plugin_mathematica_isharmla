@@ -36,13 +36,13 @@ class Isharmathematica(Star):
 
     async def _specter_ping_impl(self, event: AstrMessageEvent):
         structure = {
-            "message_str": event.message_str,
-            "message_obj": event.message_obj,
-            "platform_meta": event.platform_meta,
+            "message_str": str(event.message_str),
+            "message_obj": str(event.message_obj),
+            "platform_meta": str(event.platform_meta),
             "session": {
-                "platform_name": event.session.platform_name,
-                "message_type": event.session.message_type,
-                "session_id": event.session.session_id
+                "platform_name": str(event.session.platform_name),
+                "message_type": str(event.session.message_type),
+                "session_id": str(event.session.session_id)
             }
         }
         yield event.plain_result(json.dumps(structure))
