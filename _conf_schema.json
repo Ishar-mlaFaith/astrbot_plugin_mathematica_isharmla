@@ -1,8 +1,8 @@
 {
     "debug_prefix": {
         "description": "debug命令的触发前缀",
-        "type": "str",
+        "type": "string",
         "hint": "如想触发//ping的debug命令，可以改为`[唤醒前缀][本项]ping`触发。",
         "default": "鲨鲨"
     }
-}
+} 
