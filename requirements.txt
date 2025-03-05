@@ -1,0 +1,2 @@
+# requirements.txt
+wolframclient>=1.4.0
