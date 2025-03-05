@@ -21,7 +21,7 @@ class ManualSearcher:
             directory_series = [directory_series]
         if not isinstance(directory_series, Iterable):
             return "[DebuggingError]Invalid arguments"
-        directory = list(directory)
+        directory_series = list(directory_series)
         directory_series.append('_END') # 在地址单末尾添加标识符以停止搜索
         
         # 尝试从地址单头读取语言。如无，选择默认语言
