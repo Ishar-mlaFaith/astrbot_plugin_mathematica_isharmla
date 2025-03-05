@@ -28,7 +28,8 @@ class Isharmathematica(Star):
 
         @wraps(current_self._specter_ping_impl)
         async def wrapper_specter_ping(_, event: AstrMessageEvent, *args, **kwargs):
-            return await current_self._specter_ping_impl(event)
+            async for result in current_self._specter_ping_impl(event):
+                yield result
 
         self.specter_ping = filter.command(command_name=f'{self.debug_prefix}ping')(wrapper_specter_ping)
 
