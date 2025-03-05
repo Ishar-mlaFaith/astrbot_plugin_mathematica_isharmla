@@ -1,6 +1,7 @@
 from wolframclient.language import wl, wlexpr
 import json
 from functools import wraps
+from typing import Iterable
 
 from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
 from astrbot.api.star import Context, Star, register
@@ -21,7 +22,8 @@ class Isharmathematica(Star):
 
     @filter.command("mmahelp")
     async def send_manual(self, event: AstrMessageEvent):
-        message_obj = event.message_obj
+        message_body = event.message_str.split('mmahelp')[1:]
+        yield event.plain_result(self.manual_searcher.find(message_body))
 
     def debug_register(self):
         # 更改debug方法的触发词
@@ -43,7 +45,8 @@ class Isharmathematica(Star):
                 "platform_name": str(event.session.platform_name),
                 "message_type": str(event.session.message_type),
                 "session_id": str(event.session.session_id)
-            }
+            },
+            "message_obg.raw_message" : (event.message_obj.raw_message, str(event.message_obj.raw_message))[not isinstance(event.message_obj.raw_message, Iterable)]
         }
         yield event.plain_result(json.dumps(structure))
 
