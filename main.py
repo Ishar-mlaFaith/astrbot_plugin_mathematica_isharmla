@@ -24,9 +24,11 @@ class Isharmathematica(Star):
 
     def debug_register(self):
         # 更改debug方法的触发词
-        @wraps(self._specter_ping_impl)
-        async def wrapper_specter_ping(event: AstrMessageEvent):
-            return await self._specter_ping_impl(event)
+        current_self = self
+
+        @wraps(current_self._specter_ping_impl)
+        async def wrapper_specter_ping(_, event: AstrMessageEvent, *args, **kwargs):
+            return await current_self._specter_ping_impl(event)
 
         self.specter_ping = filter.command(command_name=f'{self.debug_prefix}ping')(wrapper_specter_ping)
 
