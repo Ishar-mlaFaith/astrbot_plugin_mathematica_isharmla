@@ -8,6 +8,7 @@ from astrbot.api import logger
 
 from .manual import ManualSearcher
 
+
 @register("mathematica_isharmla", "Ishar-mlaFaith", "尝试实现让astrbot使用mma", "0.0.114")
 class Isharmathematica(Star):
     def __init__(self, context: Context, config: dict):
@@ -34,16 +35,17 @@ class Isharmathematica(Star):
         self.specter_ping = filter.command(command_name=f'{self.debug_prefix}ping')(wrapper_specter_ping)
 
     async def _specter_ping_impl(self, event: AstrMessageEvent):
-        yield event.plain_result(
-            f'AstrMessageEvent structure:\n' +
-            f'message_str: {event.message_str}' +
-            f'message_obj: {event.message_obj}' +
-            f'platform_meta: {event.platform_meta}' +
-            f'session:\n'
-            f'  platform_name: {event.session.platform_name}' +
-            f'  message_type: {event.session.message_type}' +
-            f'  session_id: {event.session.session_id}'
-        )
+        structure = {
+            "message_str": event.message_str,
+            "message_obj": event.message_obj,
+            "platform_meta": event.platform_meta,
+            "session": {
+                "platform_name": event.session.platform_name,
+                "message_type": event.session.message_type,
+                "session_id": event.session.session_id
+            }
+        }
+        yield event.plain_result(json.dump(structure))
 
 
     # # 注册指令的装饰器。指令名为 helloworld。注册成功后，发送 `/helloworld` 就会触发这个指令，并回复 `你好, {user_name}!`
