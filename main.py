@@ -21,7 +21,7 @@ class Isharmathematica(Star):
         self.mma_cores = {}
         
         self.config = config
-        self.bot_config = context.get_config
+        self.bot_config = context.get_config()
         self.debug_prefix = config['debug_prefix']
         self.mma_prefix = config['mma_prefix']
 
@@ -63,7 +63,7 @@ class Isharmathematica(Star):
             },
             "message_obj.raw_message" : event.message_obj.raw_message,
             "listdir": os.listdir(),
-            "bot_config": {str(self.bot_config)}
+            "bot_config": {self.bot_config}
         }
         yield event.plain_result(json.dumps(structure))
 
