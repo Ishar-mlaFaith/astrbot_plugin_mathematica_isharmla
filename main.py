@@ -62,7 +62,7 @@ class Isharmathematica(Star):
             },
             "message_obj.raw_message" : event.message_obj.raw_message,
             "listdir": os.listdir(),
-            "bot_config": {key: self.bot_config[key] for key in self.bot_config}
+            "bot_config": {key: self.bot_config[key] if isinstance(self.bot_config[key], Iterable) else str(self.bot_config[key]) for key in self.bot_config}
         }
         yield event.plain_result(json.dumps(structure))
 
