@@ -32,6 +32,7 @@ class Isharmathematica(Star):
     async def _message_middleware(self, event: AstrMessageEvent):
         '''消息处理中间件，用以进行命令识别。'''
         rmsg = event.message_str
+        yield event.plain_result(f'[DEBUG]1 {rmsg}')
         command_group = 'root'
 
         for wake_prefix in self.wake_prefix:
@@ -41,15 +42,19 @@ class Isharmathematica(Star):
         else:
             yield 0
         
+        yield event.plain_result(f'[DEBUG]2 {rmsg}')
+
         if rmsg.startswith(self.debug_prefix):
             command_group = 'debug'
         else:
             for mma_prefix in self.mma_prefix:
+                yield event.plain_result(f'[DEBUG]3s {mma_prefix}')
                 if rmsg.startswith(mma_prefix):
                     rmsg = rmsg[len(mma_prefix):]
                     command_group = 'mma'
                     break
-        
+            
+
         if command_group == 'mma':
             yield event.plain_result(f'[DEBUG]Entering `mma` command dealer with rmsg `{str(rmsg)}`')
             async for result in self.mma_command(event, rmsg):
