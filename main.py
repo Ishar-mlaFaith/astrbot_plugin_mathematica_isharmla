@@ -83,10 +83,9 @@ class Isharmathematica(Star):
 
 
             if command == 'help':
-                ms = ManualSearcher()
                 if event.message_obj.raw_message['user_id'] == 206766382:
                     yield event.plain_result('[DEBUG]Entering `manual.help -mma`' 
-                    + ms.find(['mma'] + args))
+                    + self.manual_searcher.find(['mma'] + args))
             else:
                 if event.message_obj.raw_message['user_id'] == 206766382:
                     yield event.plain_result(f'[DEBUG]Entering `mma.deal_with` with rmsg `{str(rmsg)}`'
@@ -95,11 +94,11 @@ class Isharmathematica(Star):
     
     
 
-    @filter.command("mmahelp")
-    async def _send_manual_impl(self, event: AstrMessageEvent):
-        '''本插件的帮助文档，请通过`/mmahelp`查看'''
-        message_body = event.message_str.split('mmahelp')[1:]
-        yield event.plain_result(self.manual_searcher.find(message_body))
+    # @filter.command("mmahelp")
+    # async def _send_manual_impl(self, event: AstrMessageEvent):
+    #     '''本插件的帮助文档，请通过`/mmahelp`查看'''
+    #     message_body = event.message_str.split('mmahelp')[1:]
+    #     yield event.plain_result(self.manual_searcher.find(message_body))
 
 
     def prefix_register(self):
