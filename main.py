@@ -57,6 +57,8 @@ class Isharmathematica(Star):
 
     async def mma_command(self, event: AstrMessageEvent, rmsg: str):
         rmsg = rmsg.split(' ')
+        if not isinstance(rmsg, list):
+            rmsg = [rmsg]
         command = rmsg[0]
         for wake_prefix in self.wake_prefix:
             if wake_prefix in command:
