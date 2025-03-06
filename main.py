@@ -39,7 +39,7 @@ class Isharmathematica(Star):
                 rmsg = rmsg[len(wake_prefix):]
                 break
         else:
-            return 0
+            yield 0
         
         if rmsg.startswith(self.debug_prefix):
             command_group = 'debug'
