@@ -51,6 +51,7 @@ class Isharmathematica(Star):
         self.specter_ping = filter.command(command_name=f'{self.debug_prefix}ping')(wrapper_specter_ping)
 
     async def _specter_ping_impl(self, event: AstrMessageEvent):
+        self.bot_config.save_config()
         structure = {
             "message_str": str(event.message_str),
             "message_obj": str(event.message_obj),
@@ -62,7 +63,7 @@ class Isharmathematica(Star):
             },
             "message_obj.raw_message" : event.message_obj.raw_message,
             "listdir": os.listdir(),
-            "bot_config": {key: self.bot_config[key] if isinstance(self.bot_config[key], Iterable) else str(self.bot_config[key]) for key in self.bot_config}
+            "bot_config": {str(self.bot_config)}
         }
         yield event.plain_result(json.dumps(structure))
 
