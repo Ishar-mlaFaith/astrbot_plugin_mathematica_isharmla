@@ -58,6 +58,11 @@ class Isharmathematica(Star):
     async def mma_command(self, event: AstrMessageEvent, rmsg: str):
         rmsg = rmsg.split(' ')
         command = rmsg[0]
+        for wake_prefix in self.wake_prefix:
+            if wake_prefix in command:
+                command = command[len(wake_prefix):]
+                rmsg[0] = command
+                break
         args = rmsg[1:]
         sender = event.message_obj.raw_message['user_id']
 
@@ -68,9 +73,11 @@ class Isharmathematica(Star):
 
         if command == 'help':
             ms = ManualSearcher()
-            yield event.plain_result(ms.find(['mma'] + args))
+            yield event.plain_result('[DEBUG]Entering `manual.help -mma`' 
+                + ms.find(['mma'] + args))
         else:
-            yield event.plain_result(mma.deal_with(rmsg))
+            yield event.plain_result(f'[DEBUG]Entering `mma.deal_with` {rmsg}'
+                + mma.deal_with(rmsg))
 
     
     
