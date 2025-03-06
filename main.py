@@ -62,7 +62,7 @@ class Isharmathematica(Star):
             },
             "message_obj.raw_message" : event.message_obj.raw_message,
             "listdir": os.listdir(),
-            "bot_config": self.bot_config
+            "bot_config": dict(self.bot_config)
         }
         yield event.plain_result(json.dumps(structure))
 
