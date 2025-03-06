@@ -51,7 +51,7 @@ class Isharmathematica(Star):
                     break
         
         if command_group == 'mma':
-            yield event.plain_result('[DEBUG]Entering `mma` command dealer.')
+            yield event.plain_result(f'[DEBUG]Entering `mma` command dealer with rmsg `{str(rmsg)}`')
             async for result in self.mma_command(event, rmsg):
                 yield result
 
@@ -76,7 +76,7 @@ class Isharmathematica(Star):
             yield event.plain_result('[DEBUG]Entering `manual.help -mma`' 
                 + ms.find(['mma'] + args))
         else:
-            yield event.plain_result(f'[DEBUG]Entering `mma.deal_with` {rmsg}'
+            yield event.plain_result(f'[DEBUG]Entering `mma.deal_with` with rmsg `{str(rmsg)}`'
                 + mma.deal_with(rmsg))
 
     
