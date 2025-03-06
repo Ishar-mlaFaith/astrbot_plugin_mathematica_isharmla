@@ -1,6 +1,6 @@
 import wolframclient
 from wolframclient.language import wl, wlexpr
-from wolframclient.evaluation import WolframLanguageSession
+from wolframclient.evaluation import WolframCloudSession
 from typing import Iterable
 
 class MathematicaCore:
@@ -8,7 +8,9 @@ class MathematicaCore:
         self.sender = sender
         self.canvas = {}
         self.wl = wl()
-        self.session = WolframLanguageSession()
+        self.session = WolframCloudSession(
+            
+        )
 
     def deal_with(self, rmsg:Iterable):
         if rmsg[0] == 'run':
