@@ -22,7 +22,7 @@ class Isharmathematica(Star):
         
         self.config = config
         self.bot_config = context.get_config()
-        self.wake_prefix:Iterable = config['wake_prefix']
+        self.wake_prefix:Iterable = self.bot_config['wake_prefix']
         self.debug_prefix:str = config['debug_prefix']
         self.mma_prefix:Iterable = config['mma_prefix'] if isinstance(config['mma_prefix'], Iterable) else [config['mma_prefix']]
 
