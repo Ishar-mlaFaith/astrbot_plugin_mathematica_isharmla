@@ -7,9 +7,10 @@ import os
 from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
 from astrbot.api.star import Context, Star, register
 from astrbot.api import logger
+from astrbot.api.all import *
 
 from .manual import ManualSearcher
-
+from .mathematica import MathematicaCore
 
 @register("mathematica_isharmla", "Ishar-mlaFaith", "尝试实现让astrbot使用mma", "0.0.114")
 class Isharmathematica(Star):
@@ -17,24 +18,36 @@ class Isharmathematica(Star):
         super().__init__(context)
         self.commands_and_functions_help_library = {}
         self.manual_searcher = ManualSearcher()
+        self.mma_cores = {}
+        
         self.config = config
+        self.bot_config = context.get_config
         self.debug_prefix = config['debug_prefix']
-        self.debug_register()
+        self.mma_prefix = config['mma_prefix']
+
+        self.prefix_register()
+
+    # @event_message_type(EventMessageType.ALL)
+    # async def _message_middleware(self, event: AstrMessageEvent):
+    #     '''消息处理中间件，用以进行命令识别。'''
+
+    #     pass
 
     @filter.command("mmahelp")
-    async def send_manual(self, event: AstrMessageEvent):
+    async def _send_manual_impl(self, event: AstrMessageEvent):
+        '''本插件的帮助文档，请通过`/mmahelp`查看'''
         message_body = event.message_str.split('mmahelp')[1:]
         yield event.plain_result(self.manual_searcher.find(message_body))
 
-    def debug_register(self):
-        # 更改debug方法的触发词
-        current_self = self
+
+    def prefix_register(self):
+        # 更改触发词
+        current_self = self        
 
         @wraps(current_self._specter_ping_impl)
         async def wrapper_specter_ping(_, event: AstrMessageEvent, *args, **kwargs):
             async for result in current_self._specter_ping_impl(event):
                 yield result
-
         self.specter_ping = filter.command(command_name=f'{self.debug_prefix}ping')(wrapper_specter_ping)
 
     async def _specter_ping_impl(self, event: AstrMessageEvent):
@@ -48,7 +61,8 @@ class Isharmathematica(Star):
                 "session_id": str(event.session.session_id)
             },
             "message_obj.raw_message" : event.message_obj.raw_message,
-            "listdir": os.listdir()
+            "listdir": os.listdir(),
+            "bot_config": self.bot_config
         }
         yield event.plain_result(json.dumps(structure))
 
