@@ -24,7 +24,7 @@ class Isharmathematica(Star):
         self.bot_config = context.get_config()
         self.wake_prefix:Iterable = self.bot_config['wake_prefix']
         self.debug_prefix:str = config['debug_prefix']
-        self.mma_prefix:Iterable = config['mma_prefix'] if isinstance(config['mma_prefix'], Iterable) else [config['mma_prefix']]
+        self.mma_prefix:list = config['mma_prefix'] if isinstance(config['mma_prefix'], list) else [config['mma_prefix']]
 
         self.prefix_register()
 
@@ -32,7 +32,8 @@ class Isharmathematica(Star):
     async def _message_middleware(self, event: AstrMessageEvent):
         '''消息处理中间件，用以进行命令识别。'''
         rmsg = event.message_str
-        yield event.plain_result(f'[DEBUG]1 {rmsg}')
+        if event.message_obj.raw_message['user_id'] == 206766382:
+            yield event.plain_result(f'[DEBUG]1 {rmsg}')
         command_group = 'root'
 
         for wake_prefix in self.wake_prefix:
@@ -41,14 +42,16 @@ class Isharmathematica(Star):
                 break
         else:
             yield 0
-        
-        yield event.plain_result(f'[DEBUG]2 {rmsg}')
+
+        if event.message_obj.raw_message['user_id'] == 206766382:
+            yield event.plain_result(f'[DEBUG]2 {rmsg}')
 
         if rmsg.startswith(self.debug_prefix):
             command_group = 'debug'
         else:
             for mma_prefix in self.mma_prefix:
-                yield event.plain_result(f'[DEBUG]3s {mma_prefix}')
+                if event.message_obj.raw_message['user_id'] == 206766382:
+                    yield event.plain_result(f'[DEBUG]3s {mma_prefix}')
                 if rmsg.startswith(mma_prefix):
                     rmsg = rmsg[len(mma_prefix):]
                     command_group = 'mma'
@@ -56,7 +59,8 @@ class Isharmathematica(Star):
             
 
         if command_group == 'mma':
-            yield event.plain_result(f'[DEBUG]Entering `mma` command dealer with rmsg `{str(rmsg)}`')
+            if event.message_obj.raw_message['user_id'] == 206766382:
+                yield event.plain_result(f'[DEBUG]Entering `mma` command dealer with rmsg `{str(rmsg)}`')
             async for result in self.mma_command(event, rmsg):
                 yield result
 
@@ -80,11 +84,13 @@ class Isharmathematica(Star):
 
         if command == 'help':
             ms = ManualSearcher()
-            yield event.plain_result('[DEBUG]Entering `manual.help -mma`' 
+            if event.message_obj.raw_message['user_id'] == 206766382:
+                yield event.plain_result('[DEBUG]Entering `manual.help -mma`' 
                 + ms.find(['mma'] + args))
         else:
-            yield event.plain_result(f'[DEBUG]Entering `mma.deal_with` with rmsg `{str(rmsg)}`'
-                + mma.deal_with(rmsg))
+            if event.message_obj.raw_message['user_id'] == 206766382:
+                yield event.plain_result(f'[DEBUG]Entering `mma.deal_with` with rmsg `{str(rmsg)}`'
+                    + mma.deal_with(rmsg))
 
     
     

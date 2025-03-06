@@ -30,7 +30,8 @@ class MathematicaCore:
                     indent = arg[3:]
             return self._canvas(type=type, indent=indent)
         elif rmsg[0].lower() in ['frun', 'fr', 'fastrun', 'fast_run'] and len(rmsg) > 1:
-            return f'[DEBUG]MathematicaCore.deal_with `{str(rmsg)}` to get:\n' + str(self._fast_run(args=rmsg[1:]))
+            if event.message_obj.raw_message['user_id'] == 206766382:
+                return f'[DEBUG]MathematicaCore.deal_with `{str(rmsg)}` to get:\n' + str(self._fast_run(args=rmsg[1:]))
 
 
     def _run(self):
