@@ -58,7 +58,7 @@ class Isharmathematica(Star):
         rmsg = rmsg.split(' ')
         command = rmsg[0]
         args = rmsg[1:]
-        sender = event.message_obj.sender
+        sender = event.message_obj.raw_message['user_id']
 
         if not self.mma_cores.get(sender):
             self.mma_cores[sender] = MathematicaCore(sender)
