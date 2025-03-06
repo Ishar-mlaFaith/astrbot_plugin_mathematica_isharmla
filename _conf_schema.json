@@ -1,4 +1,11 @@
 {
+    "mma_prefix":{
+        "description": "mathematica相关命令的默认触发前缀，简称`mma前缀`。",
+        "type": "string",
+        "hint": "帮助文档中所有`/mma<command>`形式的命令都可以通过`[唤醒前缀][mma前缀]<command>`来执行。",
+        "default": "mma",
+        "obvious_hint": true
+    },
     "debug_prefix": {
         "description": "debug命令的触发前缀",
         "type": "string",
