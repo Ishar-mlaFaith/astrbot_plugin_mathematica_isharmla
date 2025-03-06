@@ -18,10 +18,10 @@ class ManualSearcher:
         # 根据输入地址单找到帮助文档中最接近的项目。地址单结构应为`["command_name", "argument_name", "subargument_name", ...]`
 
         # 确保地址单为可迭代对象
-        if isinstance(directory_series, str):
-            directory_series = [directory_series]
         if not isinstance(directory_series, Iterable):
             return "[DebuggingError]Invalid arguments"
+        if isinstance(directory_series, str):
+            directory_series = [directory_series]
         directory_series = list(directory_series)
         directory_series.append('_END') # 在地址单末尾添加标识符以停止搜索
         

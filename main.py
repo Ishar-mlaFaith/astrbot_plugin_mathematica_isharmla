@@ -32,8 +32,6 @@ class Isharmathematica(Star):
     async def _message_middleware(self, event: AstrMessageEvent):
         '''消息处理中间件，用以进行命令识别。'''
         rmsg = event.message_str
-        if event.message_obj.raw_message['user_id'] == 206766382:
-            yield event.plain_result(f'[DEBUG]1 {rmsg}')
         command_group = 'root'
 
         for wake_prefix in self.wake_prefix:
@@ -43,15 +41,11 @@ class Isharmathematica(Star):
         else:
             yield 0
 
-        if event.message_obj.raw_message['user_id'] == 206766382:
-            yield event.plain_result(f'[DEBUG]2 {rmsg}')
-
+        
         if rmsg.startswith(self.debug_prefix):
             command_group = 'debug'
         else:
             for mma_prefix in self.mma_prefix:
-                if event.message_obj.raw_message['user_id'] == 206766382:
-                    yield event.plain_result(f'[DEBUG]3s {mma_prefix}')
                 if rmsg.startswith(mma_prefix):
                     rmsg = rmsg[len(mma_prefix):]
                     command_group = 'mma'
@@ -65,32 +59,38 @@ class Isharmathematica(Star):
                 yield result
 
     async def mma_command(self, event: AstrMessageEvent, rmsg: str):
+        react = True
+
         rmsg = rmsg.split(' ')
         if not isinstance(rmsg, list):
             rmsg = [rmsg]
         command = rmsg[0]
         for wake_prefix in self.wake_prefix:
-            if wake_prefix in command:
+            if command.startswith(wake_prefix):
                 command = command[len(wake_prefix):]
                 rmsg[0] = command
                 break
-        args = rmsg[1:]
-        sender = event.message_obj.raw_message['user_id']
-
-        if not self.mma_cores.get(sender):
-            self.mma_cores[sender] = MathematicaCore(sender)
-        mma = self.mma_cores[sender]
-
-
-        if command == 'help':
-            ms = ManualSearcher()
-            if event.message_obj.raw_message['user_id'] == 206766382:
-                yield event.plain_result('[DEBUG]Entering `manual.help -mma`' 
-                + ms.find(['mma'] + args))
         else:
-            if event.message_obj.raw_message['user_id'] == 206766382:
-                yield event.plain_result(f'[DEBUG]Entering `mma.deal_with` with rmsg `{str(rmsg)}`'
-                    + mma.deal_with(rmsg))
+            react = False
+        
+        if react:
+            args = rmsg[1:]
+            sender = event.message_obj.raw_message['user_id']
+
+            if not self.mma_cores.get(sender):
+                self.mma_cores[sender] = MathematicaCore(sender)
+            mma = self.mma_cores[sender]
+
+
+            if command == 'help':
+                ms = ManualSearcher()
+                if event.message_obj.raw_message['user_id'] == 206766382:
+                    yield event.plain_result('[DEBUG]Entering `manual.help -mma`' 
+                    + ms.find(['mma'] + args))
+            else:
+                if event.message_obj.raw_message['user_id'] == 206766382:
+                    yield event.plain_result(f'[DEBUG]Entering `mma.deal_with` with rmsg `{str(rmsg)}`'
+                        + mma.deal_with(event=event, rmsg=rmsg))
 
     
     
