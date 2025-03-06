@@ -22,16 +22,57 @@ class Isharmathematica(Star):
         
         self.config = config
         self.bot_config = context.get_config()
-        self.debug_prefix = config['debug_prefix']
-        self.mma_prefix = config['mma_prefix']
+        self.wake_prefix:Iterable = config['wake_prefix']
+        self.debug_prefix:str = config['debug_prefix']
+        self.mma_prefix:Iterable = config['mma_prefix'] if isinstance(config['mma_prefix'], Iterable) else [config['mma_prefix']]
 
         self.prefix_register()
 
-    # @event_message_type(EventMessageType.ALL)
-    # async def _message_middleware(self, event: AstrMessageEvent):
-    #     '''消息处理中间件，用以进行命令识别。'''
+    @event_message_type(EventMessageType.ALL)
+    async def _message_middleware(self, event: AstrMessageEvent):
+        '''消息处理中间件，用以进行命令识别。'''
+        rmsg = event.message_str
+        command_group = 'root'
 
-    #     pass
+        for wake_prefix in self.wake_prefix:
+            if rmsg.startswith(wake_prefix):
+                rmsg = rmsg[len(wake_prefix):]
+                break
+        else:
+            return 0
+        
+        if rmsg.startswith(self.debug_prefix):
+            command_group = 'debug'
+        else:
+            for mma_prefix in self.mma_prefix:
+                if rmsg.startswith(mma_prefix):
+                    rmsg = rmsg[len(mma_prefix):]
+                    command_group = 'mma'
+                    break
+        
+        if command_group == 'mma':
+            async for result in self.mma_command(event, rmsg):
+                yield result
+
+    async def mma_command(self, event: AstrMessageEvent, rmsg: str):
+        rmsg = rmsg.split(' ')
+        command = rmsg[0]
+        args = rmsg[1:]
+        sender = event.message_obj.sender
+
+        if not self.mma_cores.get(sender):
+            self.mma_cores[sender] = MathematicaCore(sender)
+        mma = self.mma_cores[sender]
+
+
+        if command == 'help':
+            ms = ManualSearcher()
+            yield event.plain_result(ms.find(['mma'] + args))
+        else:
+            yield event.plain_result(mma.deal_with(rmsg))
+
+    
+    
 
     @filter.command("mmahelp")
     async def _send_manual_impl(self, event: AstrMessageEvent):
