@@ -2,6 +2,7 @@ import wolframclient
 from wolframclient.language import wl, wlexpr
 from wolframclient.evaluation import WolframCloudSession
 from typing import Iterable
+from astrbot.api.all import *
 
 class MathematicaCore:
     def __init__(self, sender='default'):
@@ -12,7 +13,7 @@ class MathematicaCore:
             
         )
 
-    def deal_with(self, rmsg:Iterable):
+    def deal_with(self, event: AstrMessageEvent, rmsg:Iterable):
         if rmsg[0] == 'run':
             return self._run()
         elif rmsg[0] == 'canvas':
