@@ -30,7 +30,7 @@ class MathematicaCore:
                     indent = arg[3:]
             return self._canvas(type=type, indent=indent)
         elif rmsg[0].lower() in ['frun', 'fr', 'fastrun', 'fast_run'] and len(rmsg) > 1:
-            return self._fast_run(args=rmsg[1:])
+            return f'[DEBUG]MathematicaCore.deal_with `{str(rmsg)}` to get:\n' + str(self._fast_run(args=rmsg[1:]))
 
 
     def _run(self):
@@ -40,4 +40,7 @@ class MathematicaCore:
         pass
 
     def _fast_run(self, args):
-        return self.session.evaluate([wlexpr(arg) for arg in args])
+        if result := self.session.evaluate([wlexpr(arg) for arg in args]):
+            return result
+        else:
+            return self.session.evaluate(wlexpr(','.join(args)))
